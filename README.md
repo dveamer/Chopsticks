@@ -1,1 +1,47 @@
 # Chopsticks
+
+젓가락의 "짝을 맞춘다"는 의미로 지은 이름으로  
+두 개의 데이터 리스트/파일/DB 등을 비교하기 위한 프로그램입니다.  
+
+
+예를들어, 쇼핑몰을 운영하고 있고 Paypal을 통해서 상품을 팔고 있다고 생각해봅시다.  
+쇼핑몰에서 발생한 결제내역 DB로 보관했습니다.  
+한 달마다 Paypal에서는 수수료를 떼고 결제금액을 송금해줍니다.  
+송금하기 전에 송금할 금액에 대해서 확인을 하기 위해 보고서를 제공할 것이며 요청시 Paypal에서 취합한 결제내역 파일을 보내줄 것입니다.  
+DB에 보관해둔 우리가 기록한 결제내역과 Paypal이 보내온 결제내역 파일을 서로 비교해볼 필요가 있습니다.  
+
+이러한 경우에 Chopsticks을 사용할 수 있습니다.  
+
+## Sample Result
+
+Json형태의 보고서가 주어지며 객체들도 List, Map 형태로 제공됩니다.  
+
+~~~json
+    {  result : false
+     , error : false
+     , errorMsg : 
+     , totalCntOfLefts : 1900000
+     , totalCntOfRights : 1700000
+     , normalCnt : 1200000
+     , cntOfOnlyLefts : 300000
+     , cntOfOnlyRights : 200000
+     , duplicatedCntOfLefts : 200000
+     , duplicatedCntOfRights : 200000
+     , crashCntOfLefts : 100000
+     , crashCntOfRights : 100000
+    }
+~~~
+
+ * result : 전체가 동일하면 true
+ * error, errorMsg : 처리도중 에러가 발생할 경우 출력됨
+ * totalCntOfLefts, totalCntOfRights : 전체 건 
+ * normalCnt : 동일 건 수
+ * cntOfOnlyLefts : 왼쪽만 존재하는 건 수
+ * cntOfOnlyRights : 오른쪽만 존재하는 건 수
+ * duplicated수CntOfLefts, duplicatedCntOfRights : 중복 건 
+ * crashCntOfLefts, crashCntOfRights : key는 같지만 값이 다른 건 수 
+
+## Requirement
+ * Java 8.0 이상
+
+
