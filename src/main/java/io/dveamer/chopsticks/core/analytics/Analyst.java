@@ -43,7 +43,7 @@ public class Analyst {
 
     private Result normal(){
 
-        StreamSupporter<Chopstick> streamSupporter = new StreamSupporter<Chopstick>();
+        final StreamSupporter<Chopstick> streamSupporter = new StreamSupporter<>();
         final HashMap<String, List<Chopstick>> leftMap = (HashMap<String, List<Chopstick>>) streamSupporter.stream(leftChopsticks)
                 .collect(Collectors.groupingBy(Chopstick::getKey));
 

@@ -3,6 +3,7 @@ package io.dveamer.chopsticks.core.report;
 import io.dveamer.chopsticks.core.analytics.Analyst;
 import io.dveamer.chopsticks.core.bean.Report;
 import io.dveamer.chopsticks.core.bean.Result;
+import io.dveamer.chopsticks.core.suporter.StreamSupporter;
 
 import java.util.Optional;
 
@@ -39,14 +40,25 @@ public class Reporter {
             return report;
         }
 
-        Optional.ofNullable(result.getLeftDuplicatedMap()).ifPresent(o->report.setDuplicatedCntOfLefts(o.size()));
-        Optional.ofNullable(result.getRightDuplicatedMap()).ifPresent(o -> report.setDuplicatedCntOfRights(o.size()));
-
         Optional.ofNullable(result.getLeftCrashChops()).ifPresent(o -> report.setCrashCntOfLefts(o.size()));
         Optional.ofNullable(result.getRightCrashChops()).ifPresent(o -> report.setCrashCntOfRights(o.size()));
 
         Optional.ofNullable(result.getLeftOnlyChops()).ifPresent(o -> report.setCntOfOnlyLefts(o.size()));
         Optional.ofNullable(result.getRightOnlyChops()).ifPresent(o -> report.setCntOfOnlyRights(o.size()));
+
+        Optional.ofNullable(result.getLeftDuplicatedMap()).ifPresent(o-> {
+            int size = StreamSupporter.streamString(o.keySet())
+                        .mapToInt(k -> o.get(k).size())
+                        .sum();
+            report.setDuplicatedCntOfLefts(size);
+        });
+
+        Optional.ofNullable(result.getRightDuplicatedMap()).ifPresent(o-> {
+            int size = StreamSupporter.streamString(o.keySet())
+                        .mapToInt(k -> o.get(k).size())
+                        .sum();
+            report.setDuplicatedCntOfRights(size);
+        });
 
         return report;
     }

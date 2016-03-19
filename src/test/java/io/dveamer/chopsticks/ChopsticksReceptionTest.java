@@ -9,10 +9,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -27,7 +31,7 @@ public class ChopsticksReceptionTest {
     String rightCrashFile = "rightCrash";
     String leftCrashFile = "leftCrash";
 
-    int defaultSize = 100000;
+    int defaultSize = 10000;
     int normalFileCnt = 12;
 
     int rightOnlyFileCnt = 2;
@@ -171,13 +175,28 @@ public class ChopsticksReceptionTest {
             reception.addRightFileLineParser(basedPath + makeFileName(rightCrashFile, index), parse);
         });
 
-        new Random().ints(rightDuplicatedFileCnt, 0, normalFileCnt-1).forEach(index -> {
-            reception.addRightFileLineParser(basedPath + makeFileName(normalFile, index), parse);
+        List<Integer> leftRandom = new Random().ints(leftDuplicatedFileCnt, 0, normalFileCnt - 1)
+                                                .boxed()
+                                                .collect(Collectors.toList());
+
+        leftRandom.forEach(index -> {
+            String dupFileName = basedPath + makeFileName(normalFile, index);
+            System.out.format("Left Duplicated File Name : %s\n", dupFileName);
+            reception.addLeftFileLineParser(dupFileName, parse);
         });
 
-        new Random().ints(leftDuplicatedFileCnt, 0, normalFileCnt-1).forEach(index -> {
-            reception.addLeftFileLineParser(basedPath + makeFileName(normalFile, index), parse);
+        List<Integer> rightRandom = new Random().ints(rightDuplicatedFileCnt, 0, normalFileCnt - 1)
+                .boxed()
+                .collect(Collectors.toList());
+
+        rightRandom.forEach(index -> {
+            String dupFileName = basedPath + makeFileName(normalFile, index);
+            System.out.format("Right Duplicated File Name : %s\n", dupFileName);
+            reception.addRightFileLineParser(dupFileName, parse);
         });
+
+
+
 
         final Long start = System.currentTimeMillis();
 
@@ -212,8 +231,15 @@ public class ChopsticksReceptionTest {
         assert(report.getCrashCntOfRights()== crashFileCnt*defaultSize);
         assert(report.getCntOfOnlyLefts()==leftOnlyFileCnt*defaultSize);
         assert(report.getCntOfOnlyRights()==rightOnlyFileCnt*defaultSize);
-        assert(report.getDuplicatedCntOfLefts()==leftDuplicatedFileCnt*defaultSize);
-        assert(report.getDuplicatedCntOfRights()==rightDuplicatedFileCnt*defaultSize);
+
+
+        Set<Integer> hashSet = new HashSet<>();
+        hashSet.addAll(leftRandom);
+        assert(report.getDuplicatedCntOfLefts()== (hashSet.size() + leftDuplicatedFileCnt)*defaultSize);
+
+        hashSet.clear();
+        hashSet.addAll(rightRandom);
+        assert(report.getDuplicatedCntOfRights()== (hashSet.size() +rightDuplicatedFileCnt)*defaultSize);
 
     }
 

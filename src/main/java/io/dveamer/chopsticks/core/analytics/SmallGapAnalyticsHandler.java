@@ -38,7 +38,7 @@ public class SmallGapAnalyticsHandler implements BiFunction<Result, ChopstickTyp
 
     public Result left(final Result result) {
 
-        StreamSupporter<Chopstick> streamSupporter = new StreamSupporter<Chopstick>();
+        final StreamSupporter<Chopstick> streamSupporter = new StreamSupporter<>();
 
         final List<Chopstick> leftNotSameKeyChopsticks = streamSupporter.stream(result.getLeftChopsticks())
                 .filter(cl -> !result.getRightMap().containsKey(cl.getKey()) || result.getRightMap().get(cl.getKey()).stream().filter(cr -> compare.apply(cl,cr)).count() < 1 )
@@ -59,7 +59,7 @@ public class SmallGapAnalyticsHandler implements BiFunction<Result, ChopstickTyp
         result.setLeftNotSameKeyChopsticks(leftNotSameKeyChopsticks);
         result.setLeftOnlyChops(leftOnlyChops);
         result.setLeftCrashChops(leftCrashChops);
-        result.setLeftDuplicatedMap(leftDuplicatedMap); // TODO 결과가 틀텼다가 맞았다가 함
+        result.setLeftDuplicatedMap(leftDuplicatedMap);
 
         return result;
 
@@ -68,7 +68,7 @@ public class SmallGapAnalyticsHandler implements BiFunction<Result, ChopstickTyp
 
     public Result right(final Result result) {
 
-        StreamSupporter<Chopstick> streamSupporter = new StreamSupporter<Chopstick>();
+        final StreamSupporter<Chopstick> streamSupporter = new StreamSupporter<>();
 
         final List<Chopstick> rightNotSameKeyChopsticks = streamSupporter.stream(result.getRightChopsticks())
                 .filter(cr -> !result.getLeftMap().containsKey(cr.getKey()) || result.getLeftMap().get(cr.getKey()).stream().filter(cl -> compare.apply(cl,cr)).count() < 1 )

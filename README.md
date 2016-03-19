@@ -38,7 +38,9 @@ Json형태의 보고서가 주어지며 객체들도 List, Map 형태로 제공됩니다.
  * normalCnt : 동일 건 수
  * cntOfOnlyLefts : 왼쪽만 존재하는 건 수
  * cntOfOnlyRights : 오른쪽만 존재하는 건 수
- * duplicated수CntOfLefts, duplicatedCntOfRights : 중복 건 
+ * duplicatedCntOfLefts, duplicatedCntOfRights : 중복 건 수 
+   - 5건의 데이터가 각 2개씩 존재한다면 10건으로 출력
+   - 5건의 데이터가 각 3개씩 존재한다면 15건으로 출력
  * crashCntOfLefts, crashCntOfRights : key는 같지만 값이 다른 건 수 
 
 ## Requirement
